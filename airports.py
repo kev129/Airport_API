@@ -10,3 +10,6 @@ from rich.theme import Theme
 
 console = Console(record=True)
 
+def get_search():
+    return Prompt.ask("Search for an an airport")
+
