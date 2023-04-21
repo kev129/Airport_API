@@ -13,3 +13,10 @@ console = Console(record=True)
 def get_search():
     return Prompt.ask("Search for an an airport")
 
+def loadAirportJSON():
+    # Load airport data from airports.json
+    f = open('airports.json')
+
+    airportData = json.load(f)
+    
+    return airportData
