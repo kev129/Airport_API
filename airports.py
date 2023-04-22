@@ -21,8 +21,16 @@ def load_airport_json():
     
     return airportData
 
+def verify_user_airport_choice(possible_matches):
+    
+
 def find_matching_airports(name, airport_data):
     possible_matches = [airport for airport in airport_data \
                         if name.lower() in airport['name'].lower()]
     
-    
+    if len(possible_matches) == 0:
+        console.print('Not a valid airport, please try again', style='bold red')
+    elif len(possible_matches) == 1:
+        console.print(possible_matches[0]['name'], style ='green')
+    else:
+        return verify_user_airport_choice(possible_matches)
