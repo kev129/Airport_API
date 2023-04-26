@@ -22,7 +22,7 @@ def load_airport_json() -> dict:
     """Opens airport.json file and loads it, to access airport data
 
     Returns:
-        dict: Dictionary containing airports and information
+        list: List of dictionaries containing airports and information
     """
     f = open('airports.json')
 
@@ -30,21 +30,42 @@ def load_airport_json() -> dict:
     
     return airportData
 
-def verify_user_airport_choice(possible_matches:list):
+def verify_user_airport_choice(possible_matches:list) -> dict:
+    """Takes a list of airports, and prompts user to select one from the list, returns one selection
+
+    Args:
+        possible_matches (list): List of airport dictionaries
+
+    Returns:
+        dict: Airport dictionary 
+    """
     airport_choices = [airports['name'] for airports in possible_matches]
 
-    selection = None
+    match = None
 
-    while selection == None:
-        user_choice = Prompt.ask("Please select one out of: " + str(airport_choices))
+    user_choice = Prompt.ask("Please select one out of: " + str(airport_choices))
+
+    while match == None:
+        user_choice = Prompt.ask("Invalid option, please select one of: " + str(airport_choices))
         
         for airports in airport_choices:
             if user_choice.lower() == airports['name'].lower():
-                selection = airports
-                return selection
+                match = possible_matches[airports]
+                console.print(f'You have selected: {(match["name"])}', style = 'green')
+    
+    return match           
             
 
-def find_matching_airports(name, airport_data):
+def find_matching_airports(name: str, airport_data: list) -> dict:
+    """Takes a name, and searches the name key in airport data, returns a single match
+
+    Args:
+        name (str): Airport name user entered
+        airport_data (list): List containing airport dictionaries
+
+    Returns:
+        dict: Airport dictionary
+    """
     possible_matches = [airport for airport in airport_data \
                         if name.lower() in airport['name'].lower()]
     
@@ -52,5 +73,17 @@ def find_matching_airports(name, airport_data):
         console.print('Not a valid airport, please try again', style='bold red')
     elif len(possible_matches) == 1:
         console.print(possible_matches[0]['name'], style ='green')
+        return possible_matches[0]
     else:
         return verify_user_airport_choice(possible_matches)
+
+
+
+if __name__ == "__main__":
+    console.print(" ")
+    console.print("✈️ ✈️ ✈️ ✈️ ✈️ ✈️ ✈️ ✈️")
+    console.print("Welcome to the Airports Informer Tool")
+    console.print("✈️ ✈️ ✈️ ✈️ ✈️ ✈️ ✈️ ✈️")
+    console.print(" ")
+
+    airportData = load_airport_json()
