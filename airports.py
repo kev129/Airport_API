@@ -43,14 +43,14 @@ def verify_user_airport_choice(possible_matches:list) -> dict:
 
     match = None
 
-    user_choice = Prompt.ask("Please select one out of: " + str(airport_choices))
+    user_choice = Prompt.ask("Please select one out of: " + str(airport_choices) + '\n')
 
     while match == None:
-        user_choice = Prompt.ask("Invalid option, please select one of: " + str(airport_choices))
+        user_choice = Prompt.ask("Invalid option, please select one of: " + str(airport_choices) + '\n')
         
-        for airports in airport_choices:
-            if user_choice.lower() == airports['name'].lower():
-                match = possible_matches[airports]
+        for i, airports in enumerate(airport_choices):
+            if user_choice.lower() == airports.lower():
+                match = possible_matches[i]
                 console.print(f'You have selected: {(match["name"])}', style = 'green')
     
     return match           
@@ -86,4 +86,9 @@ if __name__ == "__main__":
     console.print("✈️ ✈️ ✈️ ✈️ ✈️ ✈️ ✈️ ✈️")
     console.print(" ")
 
-    airportData = load_airport_json()
+    airport_data = load_airport_json()
+
+    while 1:
+        airport_search=get_search()
+        users_selection=find_matching_airports(airport_search, airport_data)
+
