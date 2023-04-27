@@ -1,12 +1,13 @@
+"""System module."""
 import json
-from datetime import datetime
+#from datetime import datetime
 
-import requests
+#import requests
 from rich.console import Console
-from rich.progress import track
+# from rich.progress import track
 from rich.prompt import Prompt
-from rich.table import Table
-from rich.theme import Theme
+# from rich.table import Table
+# from rich.theme import Theme
 
 console = Console(record=True)
 
@@ -24,11 +25,9 @@ def load_airport_json() -> dict:
     Returns:
         list: List of dictionaries containing airports and information
     """
-    f = open('airports.json')
-
-    airportData = json.load(f)
-    
-    return airportData
+    with open('airports.json', encoding=str) as airport_file:
+        airport_list = json.load(airport_file)
+    return airport_list
 
 def verify_user_airport_choice(possible_matches:list) -> dict:
     """Takes a list of airports, and prompts user to select one from the list, returns one selection
@@ -45,18 +44,16 @@ def verify_user_airport_choice(possible_matches:list) -> dict:
 
     user_choice = Prompt.ask("Please select one out of: " + str(airport_choices) + '\n')
 
-    while match == None:
-        user_choice = Prompt.ask("Invalid option, please select one of: " + str(airport_choices) + '\n')
-        
+    while match is None:
+        user_choice = Prompt.ask("Invalid option, please select one of: " \
+                                 + str(airport_choices) + '\n')
         for i, airports in enumerate(airport_choices):
             if user_choice.lower() == airports.lower():
                 match = possible_matches[i]
                 console.print(f'You have selected: {(match["name"])}', style = 'green')
-    
-    return match           
-            
+    return match
 
-def find_matching_airports_name(name: str, airport_data: list) -> dict:
+def find_matching_airports_name(name: str, airport_list: list) -> dict:
     """Takes a name, and searches the name key in airport data, returns a single match
 
     Args:
@@ -66,9 +63,8 @@ def find_matching_airports_name(name: str, airport_data: list) -> dict:
     Returns:
         dict: Airport dictionary
     """
-    possible_matches = [airport for airport in airport_data \
+    possible_matches = [airport for airport in airport_list
                         if name.lower() in airport['name'].lower()]
-    
     if len(possible_matches) == 0:
         console.print('Not a valid airport, please try again', style='bold red')
     elif len(possible_matches) == 1:
@@ -77,7 +73,7 @@ def find_matching_airports_name(name: str, airport_data: list) -> dict:
     else:
         return verify_user_airport_choice(possible_matches)
 
-def find_matching_airports_iata(iata: str, airport_data: list) -> dict:
+def find_matching_airports_iata(iata: str, airport_list: list) -> dict:
     """Takes an Iata, and searches the Iata key in the airport data, returns a single match
 
     Args:
@@ -87,12 +83,10 @@ def find_matching_airports_iata(iata: str, airport_data: list) -> dict:
     Returns:
         dict: _description_
     """
-    for airport in airport_data:
+    for airport in airport_list:
         if iata.upper() == str(airport['iata']).upper():
             return airport
-    
     return None
-
 
 if __name__ == "__main__":
     console.print(" ")
@@ -104,6 +98,5 @@ if __name__ == "__main__":
     airport_data = load_airport_json()
 
     while 1:
-        airport_search=get_search()
-        users_selection=find_matching_airports_name(airport_search, airport_data)
-
+        AIRPORT_SEARCH = get_search()
+        users_selection = find_matching_airports_name(AIRPORT_SEARCH, airport_data)
