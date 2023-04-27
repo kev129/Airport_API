@@ -1,13 +1,19 @@
 """System module."""
 import json
+import os
 #from datetime import datetime
 
-#import requests
+import requests
+from dotenv import load_dotenv
 from rich.console import Console
 # from rich.progress import track
 from rich.prompt import Prompt
 # from rich.table import Table
 # from rich.theme import Theme
+
+load_dotenv()
+
+api_key = os.environ['api_key']
 
 console = Console(record=True)
 
@@ -30,7 +36,8 @@ def load_airport_json() -> dict:
     return airport_list
 
 def verify_user_airport_choice(possible_matches:list) -> dict:
-    """Takes a list of airports, and prompts user to select one from the list, returns one selection
+    """Takes a list of airports, and prompts user to select one from the list, 
+    returns one selection
 
     Args:
         possible_matches (list): List of airport dictionaries
@@ -70,8 +77,8 @@ def find_matching_airports_name(name: str, airport_list: list) -> dict:
     elif len(possible_matches) == 1:
         console.print(possible_matches[0]['name'], style ='green')
         return possible_matches[0]
-    else:
-        return verify_user_airport_choice(possible_matches)
+
+    return verify_user_airport_choice(possible_matches)
 
 def find_matching_airports_iata(iata: str, airport_list: list) -> dict:
     """Takes an Iata, and searches the Iata key in the airport data, returns a single match
@@ -87,6 +94,19 @@ def find_matching_airports_iata(iata: str, airport_list: list) -> dict:
         if iata.upper() == str(airport['iata']).upper():
             return airport
     return None
+
+def get_flights_from_iata(iata:str) -> json:
+    """Searches airport API, using Iata for scheduled flights and returns JSON Object of 
+    flights and data
+
+    Args:
+        iata (str): Airport Iata
+
+    Returns:
+        json: Json Object containing flights and information of flights
+    """
+    return requests.get(f"https://airlabs.co/api/v9/schedules?dep_iata={iata}\
+                        &api_key=f{api_key}", timeout= 15).json()
 
 if __name__ == "__main__":
     console.print(" ")
