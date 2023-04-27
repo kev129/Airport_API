@@ -56,7 +56,7 @@ def verify_user_airport_choice(possible_matches:list) -> dict:
     return match           
             
 
-def find_matching_airports(name: str, airport_data: list) -> dict:
+def find_matching_airports_name(name: str, airport_data: list) -> dict:
     """Takes a name, and searches the name key in airport data, returns a single match
 
     Args:
@@ -77,6 +77,21 @@ def find_matching_airports(name: str, airport_data: list) -> dict:
     else:
         return verify_user_airport_choice(possible_matches)
 
+def find_matching_airports_iata(iata: str, airport_data: list) -> dict:
+    """Takes an Iata, and searches the Iata key in the airport data, returns a single match
+
+    Args:
+        iata (str): _description_
+        airport_data (list): _description_
+
+    Returns:
+        dict: _description_
+    """
+    for airport in airport_data:
+        if iata.upper() == str(airport['iata']).upper():
+            return airport
+    
+    return None
 
 
 if __name__ == "__main__":
@@ -90,5 +105,5 @@ if __name__ == "__main__":
 
     while 1:
         airport_search=get_search()
-        users_selection=find_matching_airports(airport_search, airport_data)
+        users_selection=find_matching_airports_name(airport_search, airport_data)
 
