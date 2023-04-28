@@ -156,6 +156,28 @@ def get_weather_data_destination(iata: str, airport_list: list) -> json:
 
     return load_weather_for_location(destination_lat, destination_lon)
 
+def get_temperature_destination(data:dict) -> str:
+    """Takes the destination dict, and returns the current temperature
+
+    Args:
+        data (dict): Location dict containing information about location
+
+    Returns:
+        str: Temperature of location degrees c
+    """
+    return data['current']['temp_c']
+
+def get_weather_condition_destination(data:dict) -> str:
+    """Takes the destination dict, and returns the current weather condition
+
+    Args:
+        data (dict): Location dict containing information about location
+
+    Returns:
+        str: Weather condition
+    """
+    return data['current']['condition']['text']
+
 if __name__ == "__main__":
     console.print(" ")
     console.print("✈️ ✈️ ✈️ ✈️ ✈️ ✈️ ✈️ ✈️")
