@@ -13,7 +13,8 @@ from rich.prompt import Prompt
 
 load_dotenv()
 
-api_key = os.environ['api_key']
+airport_api_key = os.environ['airport_api_key']
+weather_api_key = os.environ['weather_api_key']
 
 console = Console(record=True)
 
@@ -31,7 +32,7 @@ def load_airport_json() -> dict:
     Returns:
         list: List of dictionaries containing airports and information
     """
-    with open('airports.json', encoding=str) as airport_file:
+    with open('airports.json', encoding='utf-8') as airport_file:
         airport_list = json.load(airport_file)
     return airport_list
 
@@ -49,11 +50,8 @@ def verify_user_airport_choice(possible_matches:list) -> dict:
 
     match = None
 
-    user_choice = Prompt.ask("Please select one out of: " + str(airport_choices) + '\n')
-
     while match is None:
-        user_choice = Prompt.ask("Invalid option, please select one of: " \
-                                 + str(airport_choices) + '\n')
+        user_choice = Prompt.ask("Please select one out of: " + str(airport_choices) + '\n')
         for i, airports in enumerate(airport_choices):
             if user_choice.lower() == airports.lower():
                 match = possible_matches[i]
@@ -74,7 +72,8 @@ def find_matching_airports_name(name: str, airport_list: list) -> dict:
                         if name.lower() in airport['name'].lower()]
     if len(possible_matches) == 0:
         console.print('Not a valid airport, please try again', style='bold red')
-    elif len(possible_matches) == 1:
+        return None
+    if len(possible_matches) == 1:
         console.print(possible_matches[0]['name'], style ='green')
         return possible_matches[0]
 
@@ -103,10 +102,24 @@ def get_flights_from_iata(iata:str) -> json:
         iata (str): Airport Iata
 
     Returns:
-        json: Json Object containing flights and information of flights
+        json: JSON Object containing flights and information of flights
     """
     return requests.get(f"https://airlabs.co/api/v9/schedules?dep_iata={iata}\
-                        &api_key=f{api_key}", timeout= 15).json()
+                        &api_key=f{airport_api_key}", timeout= 15).json()
+
+def load_weather_for_location(lat: str, lng: str)-> json:
+    """Takes in a longitude and latitude, and gets the current weather for the associated 
+    location returns a json object containing data
+
+    Args:
+        lat (str): latitude of location
+        lng (str): longitude of location
+
+    Returns:
+        json: JSON Object containing weather information
+    """
+    return requests.get(f"http://api.weatherapi.com/v1/current.json?key={weather_api_key}=\
+                        {lat},{lng}", timeout= 15).json()
 
 if __name__ == "__main__":
     console.print(" ")
