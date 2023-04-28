@@ -121,6 +121,41 @@ def load_weather_for_location(lat: str, lng: str)-> json:
     return requests.get(f"http://api.weatherapi.com/v1/current.json?key={weather_api_key}=\
                         {lat},{lng}", timeout= 15).json()
 
+def get_airport_data_value(airport: dict, key: str)-> str:
+    """Takes an airport dict, and returns a value based on key
+
+    Args:
+        airport (dict): Airport Dict containing information about airport
+        key (str): Dict key that needs to be accessed
+
+    Returns:
+        str: Dict Value
+    """
+    value = airport[key]
+
+    if value is not None:
+        return value
+
+    return None
+
+def get_weather_data_destination(iata: str, airport_list: list) -> json:
+    """Takes Iata, finds the airport, and gets the longitude and latitude, returns
+    a json object with weather data
+
+    Args:
+        iata (str): Airport Iata from list of flights
+        airport_list (list): List of airports, containing data about airport
+
+    Returns:
+        json: JSON Object containing weather data from weather API
+    """
+    destination_airport = find_matching_airports_iata(iata, airport_list)
+
+    destination_lat = get_airport_data_value(destination_airport, 'lat')
+    destination_lon = get_airport_data_value(destination_airport, 'lon')
+
+    return load_weather_for_location(destination_lat, destination_lon)
+
 if __name__ == "__main__":
     console.print(" ")
     console.print("✈️ ✈️ ✈️ ✈️ ✈️ ✈️ ✈️ ✈️")
