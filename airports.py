@@ -10,7 +10,7 @@ from rich.progress import track
 from rich.prompt import Prompt
 from rich.table import Table
 
-
+# pylint: disable=C0303,W0702
 
 load_dotenv()
 
@@ -195,12 +195,12 @@ def render_flights(flights: dict, airport_list: list) -> NoReturn:
     table.add_column("Flight No.", justify="right", style="cyan", no_wrap=True)
     table.add_column("Departure time", style="blue")
     table.add_column("Destination", style="magenta")
-    table.add_column("Delayed?", justify="right", style="green")
+    table.add_column("Delayed? (Minutes)", justify="right", style="green")
     table.add_column("Weather", justify="right", style="yellow")
 
     flight_response = flights["response"]
     for flight in track(flight_response, description= "Searching..."):
-        arrival_icao =flight["arr_icao"]
+        arrival_icao = flight["arr_icao"]
         print(f"Checking {arrival_icao}...")
         weather_data = get_weather_data_destination(arrival_icao,airport_list)
 
@@ -228,8 +228,11 @@ if __name__ == "__main__":
     while 1:
         AIRPORT_SEARCH = get_search()
         users_selection = find_matching_airports_name(AIRPORT_SEARCH, airport_data)
+        
+        if users_selection is None:
+            continue
+
         departure_icao = users_selection['icao']
         departure_airport = find_matching_airports_icao(departure_icao, airport_data)
         flights_user_airport= get_flights_from_icao(departure_icao)
-        print(flights_user_airport)
         render_flights(flights_user_airport,airport_data)
