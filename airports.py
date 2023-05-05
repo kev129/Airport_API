@@ -92,11 +92,11 @@ def find_airports_by_icao(icao: str, airport_list: list[dict]) -> dict:
     """Takes an Icao, and searches the Icao key in the airport data, returns a single match
 
     Args:
-        Icao (str): _description_
-        airport_data (list): _description_
+        Icao (str): The ICAO code of the airport to search for.
+        airport_data (list): List containing airport dictionaries
 
     Returns:
-        dict: _description_
+        dict: Airport dictionary
     """
     for airport in airport_list:
         if icao.upper() == str(airport["icao"]).upper():
