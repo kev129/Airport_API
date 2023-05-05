@@ -64,3 +64,7 @@ print(f"Temperature at the destination airport is {temperature} degrees Celsius"
 ## Note
 
 This module uses two API's
+Source for airport.json https://gist.github.com/tdreyno/4278655
+Source for airport2.json https://www.pureleapfrog.org/aer-lingus/carbon-neutral/airports-json/
+
+airports2.json contains all airports, the first json doesn't contain all airports and may lead to "Nonetype object not subscriptable", as the function `find_matching_airports_icao(icao: str, airport_list: list)` returns None

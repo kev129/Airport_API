@@ -33,7 +33,7 @@ def load_airport_json() -> dict:
     Returns:
         list: List of dictionaries containing airports and information
     """
-    with open("airports.json", encoding="utf-8") as airport_file:
+    with open("airports2.json", encoding="utf-8") as airport_file:
         airport_list = json.load(airport_file)
     return airport_list
 
@@ -47,17 +47,16 @@ def verify_user_airport_choice(possible_matches:list) -> dict:
     Returns:
         dict: Airport dictionary 
     """
-    airport_choices = [airports["name"] for airports in possible_matches]
+    airport_choices = [airports["name"].strip() for airports in possible_matches]
 
-    match = None
-
-    while match is None:
+    while True:
         user_choice = Prompt.ask("Please select one out of: " + str(airport_choices) + "\n")
         for i, airports in enumerate(airport_choices):
-            if user_choice.lower() == airports.lower():
+            if user_choice.strip().lower() == airports.strip().lower():
                 match = possible_matches[i]
                 console.print(f"You have selected: {(match['name'])}", style = "green")
-    return match
+                return match
+        console.print("Invalid selection please try again, enter the full airport name", style = "red")
 
 def find_matching_airports_name(name: str, airport_list: list) -> dict:
     """Takes a name, and searches the name key in airport data, returns a single match
@@ -208,8 +207,9 @@ def render_flights(flights: dict, airport_list: list) -> NoReturn:
             destination_temperature = get_temperature_destination(weather_data)
             destination_weather_text = get_weather_condition_destination(weather_data)
             destination_name = find_matching_airports_icao(flight["arr_icao"], airport_data)['name']
-        except:
-            pass
+        except Exception as e:
+            print(e)
+            break
         table.add_row(flight["flight_number"], flight["dep_time"], destination_name,
                     str(flight["delayed"]), str(destination_temperature)+ '°C' + ' - ' +
                     destination_weather_text)
