@@ -10,7 +10,7 @@ from rich.progress import track
 from rich.prompt import Prompt
 from rich.table import Table
 
-# pylint: disable=C0303,W0702
+# pylint: disable=C0303,W0702,C0103
 
 load_dotenv()
 
