@@ -26,7 +26,7 @@ def get_search() -> str:
     """
     return Prompt.ask("Search for an an airport")
 
-def load_airport_json() -> dict:
+def load_airport_data() -> dict:
     """Opens airport.json file and loads it, to access airport data
 
     Returns:
@@ -241,7 +241,7 @@ if __name__ == "__main__":
     console.print("✈️ ✈️ ✈️ ✈️ ✈️ ✈️ ✈️ ✈️")
     console.print(" ")
 
-    airport_data = load_airport_json()
+    airport_data = load_airport_data()
 
     while 1:
         search_term = get_search()
