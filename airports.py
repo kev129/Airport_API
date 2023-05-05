@@ -27,7 +27,16 @@ def get_search() -> str:
     return Prompt.ask("Search for an an airport")
 
 def load_airport_data() -> dict:
-    """Opens airport.json file and loads it, to access airport data
+    """Opens airport.json file and loads it, to access airport data. Data structure: {
+    "name": "",
+    "city": "",
+    "country": "",
+    "IATA": "",
+    "icao": "",
+    "lat": "",
+    "lon": "",
+    "timezone": ""
+  }
 
     Returns:
         list: List of dictionaries containing airports and information
