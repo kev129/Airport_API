@@ -14,6 +14,10 @@ from rich.table import Table
 
 load_dotenv()
 
+airport_api_key = os.environ["airport_api_key"]
+weather_api_key = os.environ["weather_api_key"]
+console = Console(record=True)
+
 def get_search() -> str:
     """Prompts the user to enter an airport to search
 
@@ -231,10 +235,6 @@ def render_flights(flights: dict, airport_list: list) -> NoReturn:
     console.print(table)
 
 if __name__ == "__main__":
-    airport_api_key = os.environ["airport_api_key"]
-    weather_api_key = os.environ["weather_api_key"]
-    console = Console(record=True)
-
     console.print(" ")
     console.print("✈️ ✈️ ✈️ ✈️ ✈️ ✈️ ✈️ ✈️")
     console.print("Welcome to the Airports Informer Tool")
