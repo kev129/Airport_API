@@ -70,3 +70,5 @@ Source for airport.json https://gist.github.com/tdreyno/4278655 .
 Source for airport2.json https://www.pureleapfrog.org/aer-lingus/carbon-neutral/airports-json/ .
 
 airports2.json contains all airports, the first json doesn't contain all airports and may lead to "Nonetype object not subscriptable", as the function `find_matching_airports_icao(icao: str, airport_list: list)` returns None
+
+airports2.json does miss few, one airport is ICAO: VVTX, however it contains more airports than airport.json
