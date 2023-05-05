@@ -49,9 +49,9 @@ def select_airport_from_list(possible_matches:list[dict]) -> dict:
     airport_choices = [airports["name"].strip() for airports in possible_matches]
 
     while True:
-        user_choice = Prompt.ask("Please select one out of: " + str(airport_choices) + "\n")
+        user_choice = Prompt.ask("Please select one out of: " + str(airport_choices) + "\n").strip().lower()
         for i, airports in enumerate(airport_choices):
-            if user_choice.strip().lower() == airports.strip().lower():
+            if user_choice == airports.lower():
                 match = possible_matches[i]
                 console.print(f"You have selected: {(match['name'])}", style = "green")
                 return match
